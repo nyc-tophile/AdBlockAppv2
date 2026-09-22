@@ -12,11 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout repository
+      # 1. Checkout source code
       - name: Checkout source
         uses: actions/checkout@v4
 
-      # 2. Set up Java
+      # 2. Set up Java 17
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -24,7 +24,13 @@ jobs:
           java-version: '17'
           cache: gradle
 
-      # 3. Find Android SDK manager
+      # 3. Set up Gradle
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      # 4. Find Android SDK manager
       - name: Find Android SDK manager
         shell: bash
         run: |
@@ -44,7 +50,7 @@ jobs:
           echo "SDK Manager found at: $SDKMANAGER"
           echo "SDKMANAGER=$SDKMANAGER" >> "$GITHUB_ENV"
 
-      # 4. Install Android SDK packages
+      # 5. Install Android SDK packages
       - name: Install Android SDK packages
         shell: bash
         run: |
@@ -55,7 +61,7 @@ jobs:
             "platforms;android-35" \
             "build-tools;35.0.0"
 
-      # 5. Check project structure
+      # 6. Check project structure
       - name: Check project files
         shell: bash
         run: |
@@ -65,20 +71,24 @@ jobs:
           echo "Project files:"
           ls -la
 
-          if [ ! -f "gradlew" ]; then
-            echo "Error: gradlew was not found in the repository root."
-            exit 1
-          fi
+          echo "App directory:"
+          ls -la app
 
-      # 6. Grant Gradle execute permission
-      - name: Grant Gradle execute permission
-        run: chmod +x gradlew
+          echo "Gradle version:"
+          gradle --version
 
       # 7. Build debug APK
       - name: Build debug APK
-        run: ./gradlew assembleDebug --stacktrace
+        run: gradle assembleDebug --stacktrace
 
-      # 8. Upload APK
+      # 8. Find generated APK
+      - name: Find APK
+        shell: bash
+        run: |
+          echo "Generated APK files:"
+          find . -type f -name "*.apk"
+
+      # 9. Upload APK
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:

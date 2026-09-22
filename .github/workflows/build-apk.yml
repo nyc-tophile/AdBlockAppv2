@@ -1,3 +1,4 @@
+
 name: Build Android APK
 
 on:
@@ -21,8 +22,9 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-        with: 
+        with:
           accept-android-sdk-licenses: true
+          log-accepted-android-sdk-licenses: false
 
       - name: Build debug APK
         uses: gradle/gradle-build-action@v3

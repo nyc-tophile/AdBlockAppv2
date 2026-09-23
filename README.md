@@ -1,29 +1,15 @@
-# AdBlock Android App
+# AdBlock Quick Settings Tile
 
-Minimal Android app that toggles Android Private DNS between an ad-blocking hostname and `off`.
+This project adds a Quick Settings tile that toggles AdGuard Private DNS.
 
-## Important permission setup
+## One-time development permission
 
-Android protects `WRITE_SECURE_SETTINGS`. After installing the APK on a test device, grant it with:
+Android protects WRITE_SECURE_SETTINGS. On a personal development device, connect through ADB and run:
 
 ```bash
 adb shell pm grant com.example.adblock android.permission.WRITE_SECURE_SETTINGS
 ```
 
-The app cannot grant this permission to itself. ADB or a compatible Shizuku setup is required.
+Then install the APK, add the AdBlock tile through Quick Settings edit mode, and tap it.
 
-## Build
-
-Open this folder in Android Studio and run:
-
-```bash
-./gradlew assembleDebug
-```
-
-The generated debug APK will be under `app/build/outputs/apk/debug/`.
-
-## Notes
-
-- The selected DNS hostname is `dns.adguard-dns.com`.
-- OFF currently sets Private DNS mode to `off`; production should store and restore the user's previous Private DNS configuration instead.
-- Test on multiple Android manufacturers before distributing the APK.
+This project controls Private DNS; it is not a custom VPN implementation.

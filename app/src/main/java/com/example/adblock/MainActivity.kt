@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             MaterialTheme {
                 AdBlockHome {
-                    startActivity(Intent(Settings.ACTION_PRIVATE_DNS_SETTINGS))
+                    startActivity(Intent("android.settings.PRIVATE_DNS_SETTINGS"))
                 }
             }
         }
